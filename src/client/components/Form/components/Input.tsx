@@ -19,6 +19,7 @@ export default function Input({
                 {label[0].toUpperCase() + label.slice(1)}
             </label>
             <input
+                required
                 type={type}
                 name={label.toLowerCase()}
                 className='input'

@@ -1,20 +1,25 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import {
+    authToken,
     displayForm,
     inputEmail,
     inputName,
     inputPassword,
     loginState,
+    userId,
 } from '../../atoms'
 import Input from './components/Input'
-import axios from 'axios'
-import { hash } from 'bcryptjs'
+import axios, { AxiosResponse } from 'axios'
+import { useState } from 'react'
 
 const API_URL = 'http://localhost:3030/users'
 
 export default function Form() {
+    const [errorMessage, setErrorMessage] = useState('')
     const login = useAtomValue(loginState)
     const setDisplay = useSetAtom(displayForm)
+    const setUserId = useSetAtom(userId)
+    const setToken = useSetAtom(authToken)
     const [name, setName] = useAtom(inputName)
     const [email, setEmail] = useAtom(inputEmail)
     const [password, setPassword] = useAtom(inputPassword)
@@ -30,29 +35,48 @@ export default function Form() {
 
     const handleSubmit = async (e: React.FormEvent<Element>) => {
         e.preventDefault()
-        switch (login) {
-            case 'login':
-                axios
-                    .post(API_URL + '/login', {
-                        email: email,
-                        password: password,
-                    })
-                    .then((res) => console.log(res.data))
+        try {
+            let res: void | AxiosResponse<any, any>
+            switch (login) {
+                case 'login':
+                    res = await axios
+                        .post(API_URL + '/login', {
+                            email: email,
+                            password: password,
+                        })
+                        .then((res) => console.log(res.data))
+                    break
 
-                break
+                case 'signup':
+                    res = await axios
+                        .post(API_URL + '/register', {
+                            name: name,
+                            email: email,
+                            password: password,
+                        })
+                        .then((res) => console.log(res.data))
+                    break
+            }
 
-            case 'signup':
-                axios
-                    .post(API_URL + '/register', {
-                        name: name,
-                        email: email,
-                        password: password,
-                    })
-                    .then((res) => console.log(res.data))
+            if (res && res.data.user) {
+                setUserId(res.data.user.id)
+                console.log('INFO: Saved User Id: ', res.data.user.id)
+            }
 
-                break
+            if (res && res.data.token) {
+                localStorage.setItem('token', res.data.token as string)
+                setToken(localStorage.getItem('token'))
+                console.log('INFO: Saved token to Local Storage')
+            } else {
+                console.log('INFO: No valid token received')
+            }
+
+            setDisplay(false)
+        } catch (error: any) {
+            console.error('ERROR: Authentication failed: ', error)
+            setErrorMessage(error.message)
+            setDisplay(true)
         }
-        setDisplay(false)
     }
 
     return (
@@ -98,6 +122,7 @@ export default function Form() {
                         inputValue={password}
                     />
                     <input type='submit' className='btn' />
+                    <p className='text-center text-error'>{errorMessage}</p>
                 </form>
             </div>
         </div>
