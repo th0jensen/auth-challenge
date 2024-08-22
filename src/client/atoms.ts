@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { atom } from 'jotai'
 
 // Display Management
@@ -10,6 +11,6 @@ export const inputEmail = atom<string>('')
 export const inputPassword = atom<string>('')
 
 // User Data Store
-export const loggedIn = atom<boolean>(false)
 export const authToken = atom<string | null>(null)
 export const userId = atom<number | null>(null)
+export const userObj = atom<Prisma.UserCreateInput | null>(null)

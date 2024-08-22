@@ -1,4 +1,7 @@
+import type { AxiosResponse } from 'axios'
+import axios from 'axios'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useState } from 'react'
 import {
     authToken,
     displayForm,
@@ -9,10 +12,7 @@ import {
     userId,
 } from '../../atoms'
 import Input from './components/Input'
-import axios, { AxiosResponse } from 'axios'
-import { useState } from 'react'
-
-const API_URL = 'http://localhost:3030/users'
+import _const from '../../const'
 
 export default function Form() {
     const [errorMessage, setErrorMessage] = useState('')
@@ -33,45 +33,45 @@ export default function Form() {
         }
     }
 
-    const handleSubmit = async (e: React.FormEvent<Element>) => {
+    const loginToState = (res: AxiosResponse) => {
+        console.log(res)
+        localStorage.setItem('userId', res.data.user.id)
+        // console.log('INFO: Saved User Id: ', res.data.user.id)
+        localStorage.setItem('token', res.data.token)
+        setToken(localStorage.getItem('token'))
+        // console.log(
+        //     'INFO: Saved token to Local Storage:',
+        //     localStorage.getItem('token')
+        // )
+        setDisplay(false)
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
         try {
-            let res: void | AxiosResponse<any, any>
+            let res: AxiosResponse | void
+
             switch (login) {
                 case 'login':
                     res = await axios
-                        .post(API_URL + '/login', {
-                            email: email,
-                            password: password,
+                        .post(_const.API_LOGIN_URL, {
+                            email,
+                            password,
                         })
-                        .then((res) => console.log(res.data))
+                        .then((res) => loginToState(res))
                     break
 
                 case 'signup':
                     res = await axios
-                        .post(API_URL + '/register', {
-                            name: name,
-                            email: email,
-                            password: password,
+                        .post(_const.API_REGISTER_URL, {
+                            name,
+                            email,
+                            password,
                         })
-                        .then((res) => console.log(res.data))
+                        .then((res) => loginToState(res))
                     break
             }
-
-            if (res && res.data.user) {
-                setUserId(res.data.user.id)
-                console.log('INFO: Saved User Id: ', res.data.user.id)
-            }
-
-            if (res && res.data.token) {
-                localStorage.setItem('token', res.data.token as string)
-                setToken(localStorage.getItem('token'))
-                console.log('INFO: Saved token to Local Storage')
-            } else {
-                console.log('INFO: No valid token received')
-            }
-
-            setDisplay(false)
         } catch (error: any) {
             console.error('ERROR: Authentication failed: ', error)
             setErrorMessage(error.message)
@@ -80,8 +80,8 @@ export default function Form() {
     }
 
     return (
-        <div className='fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center pl-24 pt-24 backdrop-blur-sm'>
-            <div className='card bg-base-300 rounded-2xl p-4'>
+        <div className='fixed left-0 top-0 z-10 flex size-full items-center justify-center pl-24 pt-24 backdrop-blur-sm'>
+            <div className='card rounded-2xl bg-base-300 p-4'>
                 <div className='flex justify-between pb-4'>
                     <h1 className='card-title'>
                         {loginSwitch()
@@ -97,17 +97,17 @@ export default function Form() {
                 </div>
                 <form
                     onSubmit={(e) => handleSubmit(e)}
-                    className='flex flex-col w-96 gap-8'
+                    className='flex w-96 flex-col gap-8'
                 >
-                    {loginSwitch() ? (
-                        <></>
-                    ) : (
+                    {!loginSwitch() ? (
                         <Input
                             label='name'
                             type='text'
                             inputChange={(e) => setName(e.target.value)}
                             inputValue={name}
                         />
+                    ) : (
+                        <></>
                     )}
                     <Input
                         label='email'
