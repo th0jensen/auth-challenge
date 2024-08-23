@@ -3,25 +3,26 @@ import axios from 'axios'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
 import {
-    authToken,
-    displayForm,
-    inputEmail,
-    inputName,
-    inputPassword,
-    loginState,
-    userId,
+    tokenAtom,
+    modalAtom,
+    inputEmailAtom,
+    inputNameAtom,
+    inputPasswordAtom,
+    loginStateAtom,
+    userIdAtom,
 } from '../../atoms'
 import Input from './components/Input'
-import _const from '../../const'
+import { API_LOGIN_URL, API_REGISTER_URL } from '../../const'
 
-export default function Form() {
+export default function LoginModal() {
     const [errorMessage, setErrorMessage] = useState('')
-    const login = useAtomValue(loginState)
-    const setDisplay = useSetAtom(displayForm)
-    const setToken = useSetAtom(authToken)
-    const [name, setName] = useAtom(inputName)
-    const [email, setEmail] = useAtom(inputEmail)
-    const [password, setPassword] = useAtom(inputPassword)
+    const login = useAtomValue(loginStateAtom)
+    const setDisplay = useSetAtom(modalAtom)
+    const setToken = useSetAtom(tokenAtom)
+    const setUserId = useSetAtom(userIdAtom)
+    const [name, setName] = useAtom(inputNameAtom)
+    const [email, setEmail] = useAtom(inputEmailAtom)
+    const [password, setPassword] = useAtom(inputPasswordAtom)
 
     const loginSwitch = (): boolean => {
         switch (login) {
@@ -34,9 +35,8 @@ export default function Form() {
 
     const loginToState = (res: AxiosResponse) => {
         console.log(res)
-        localStorage.setItem('userId', res.data.user.id)
-        localStorage.setItem('token', res.data.token)
-        setToken(localStorage.getItem('token'))
+        setUserId(res.data.user.id)
+        setToken(res.data.token)
         setDisplay(false)
     }
 
@@ -49,7 +49,7 @@ export default function Form() {
             switch (login) {
                 case 'login':
                     res = await axios
-                        .post(_const.API_LOGIN_URL, {
+                        .post(API_LOGIN_URL, {
                             email,
                             password,
                         })
@@ -58,7 +58,7 @@ export default function Form() {
 
                 case 'signup':
                     res = await axios
-                        .post(_const.API_REGISTER_URL, {
+                        .post(API_REGISTER_URL, {
                             name,
                             email,
                             password,

@@ -1,38 +1,55 @@
+import { Prisma } from '@prisma/client'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import {
-    addingMovie,
-    inputCoverAtom,
-    inputDescriptionAtom,
-    inputRuntimeAtom,
-    inputTitleAtom,
-    refreshAtom,
-    tokenAtom,
+    editTitleAtom,
+    editDescriptionAtom,
+    editCoverAtom,
+    editRuntimeAtom,
     userIdAtom,
+    tokenAtom,
+    isEditingAtom,
+    refreshAtom,
 } from '../../../atoms'
-import axios from 'axios'
 import { API_MOVIES_URL } from '../../../const'
+import axios from 'axios'
+import { useEffect } from 'react'
 
-export default function MoviesListForm() {
-    const [title, setTitle] = useAtom(inputTitleAtom)
-    const [description, setDescription] = useAtom(inputDescriptionAtom)
-    const [cover, setCover] = useAtom(inputCoverAtom)
-    const [runtime, setRuntime] = useAtom(inputRuntimeAtom)
-    const setIsAdding = useSetAtom(addingMovie)
+export default function EditMovieListItem(props: {
+    movie: Prisma.MovieUncheckedCreateInput
+}) {
+    const [title, setTitle] = useAtom(editTitleAtom)
+    const [description, setDescription] = useAtom(editDescriptionAtom)
+    const [cover, setCover] = useAtom(editCoverAtom)
+    const [runtime, setRuntime] = useAtom(editRuntimeAtom)
+    const [refresh, setRefresh] = useAtom(refreshAtom)
+    const setIsEditing = useSetAtom(isEditingAtom)
     const userId = useAtomValue(userIdAtom)
     const token = useAtomValue(tokenAtom)
-    const [refresh, setRefresh] = useAtom(refreshAtom)
+    const { movie } = props
+
+    // useEffect(() => {
+    //     setTitle(movie.title)
+    //     setDescription(movie.description)
+    //     setCover(movie.cover)
+    //     setRuntime(movie.runtimeMins.toString())
+    // }, [])
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
+        const updatedTitle = title || movie.title
+        const updatedDescription = description || movie.description
+        const updatedCover = cover || movie.cover
+        const updatedRuntime = runtime || movie.runtimeMins.toString()
+
         axios
-            .post(
-                API_MOVIES_URL,
+            .put(
+                `${API_MOVIES_URL}/${movie.id}`,
                 {
-                    title: title,
-                    description: description,
-                    cover: cover,
-                    runtimeMins: runtime,
+                    title: updatedTitle,
+                    description: updatedDescription,
+                    cover: updatedCover,
+                    runtimeMins: updatedRuntime,
                     userId: userId,
                 },
                 {
@@ -43,18 +60,22 @@ export default function MoviesListForm() {
             )
             .then((res) => {
                 console.log(res)
-                setIsAdding(false)
+                setIsEditing(false)
                 setRefresh(!refresh)
             })
             .catch((err) => {
-                console.error('Error creating movie:', err)
+                console.error('Error updating movie:', err)
             })
     }
 
     return (
         <div className='card bg-base-100 image-full w-96 shadow-xl relative min-h-96'>
             <figure className='relative'>
-                <img src={cover} alt={title} />
+                <img
+                    className='h-72 w-full'
+                    src={movie.cover}
+                    alt={movie.title}
+                />
                 <div className='absolute inset-0 bg-black opacity-50'></div>
             </figure>
             <form
@@ -63,28 +84,28 @@ export default function MoviesListForm() {
             >
                 <input
                     className='input input-md'
-                    placeholder='Title'
+                    placeholder={movie.title}
                     type='text'
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
                 <input
                     className='input input-md'
-                    placeholder='Runtime Mins'
+                    placeholder={`${movie.runtimeMins} mins`}
                     type='number'
                     value={runtime}
                     onChange={(e) => setRuntime(e.target.value)}
                 />
                 <input
                     className='input input-md'
-                    placeholder='Movie Poster URL'
+                    placeholder={`Movie Poster URL`}
                     type='url'
                     value={cover}
                     onChange={(e) => setCover(e.target.value)}
                 />
                 <textarea
                     className='textarea textarea-md'
-                    placeholder='Description'
+                    placeholder={`Description:\n${movie.description}`}
                     cols={20}
                     rows={7}
                     value={description}

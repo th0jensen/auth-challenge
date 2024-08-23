@@ -6,5 +6,7 @@ const router: Router = express.Router()
 
 router.get('/', authenticate, moviesController.getAllMovies)
 router.post('/', authenticate, moviesController.createMovie)
+router.delete('/:id', authenticate, moviesController.deleteMovie)
+router.put('/:id', authenticate, moviesController.editMovie)
 
 export default router

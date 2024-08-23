@@ -1,11 +1,18 @@
-import { useAtomValue, useSetAtom } from 'jotai'
-import { loginState, displayForm, userObj } from '../../atoms'
-import Logout from './Logout'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import {
+    loginStateAtom,
+    modalAtom,
+    showProfileMenuAtom,
+    userDataAtom,
+} from '../../atoms'
+import LogoutButton from './components/LogoutButton'
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 
 export default function Header() {
-    const setLogin = useSetAtom(loginState)
-    const setDisplay = useSetAtom(displayForm)
-    const user = useAtomValue(userObj)
+    const setLogin = useSetAtom(loginStateAtom)
+    const setDisplay = useSetAtom(modalAtom)
+    const user = useAtomValue(userDataAtom)
+    const [showProfileMenu, setShowProfileMenu] = useAtom(showProfileMenuAtom)
 
     return (
         <header className='navbar fixed bg-base-300 p-4 z-50'>
@@ -14,12 +21,32 @@ export default function Header() {
                     Movie Manager
                 </h1>
             </div>
-            <div className='navbar-end gap-4'>
+            <div className='navbar-end'>
                 {user !== null ? (
-                    <>
-                        <p className='font-bold btn btn-ghost'>{user.name}</p>
-                        <Logout />
-                    </>
+                    <div className='flex flex-col justify-center'>
+                        <div className='w-52 flex justify-center items-center'>
+                            <button
+                                className='btn btn-ghost w-48'
+                                onClick={() =>
+                                    setShowProfileMenu(!showProfileMenu)
+                                }
+                            >
+                                {user.name}{' '}
+                                {showProfileMenu ? (
+                                    <ChevronUpIcon />
+                                ) : (
+                                    <ChevronDownIcon />
+                                )}
+                            </button>
+                        </div>
+                        {showProfileMenu ? (
+                            <div className='fixed top-16 bg-base-300 w-52 h-16 flex justify-center items-center rounded-xl'>
+                                <LogoutButton />
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                    </div>
                 ) : (
                     <>
                         <button

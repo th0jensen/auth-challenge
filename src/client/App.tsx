@@ -1,27 +1,24 @@
 import axios from 'axios'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect } from 'react'
-import { authToken, displayForm, userId, userObj } from './atoms'
-import Form from './components/Form'
+import { tokenAtom, modalAtom, userIdAtom, userDataAtom } from './atoms'
 import Header from './components/Header/index'
-import _const from './const'
 import Movies from './components/Movies'
+import { API_BASE_URL } from './const'
+import LoginModal from './components/LoginModal'
 
 export default function App() {
-    const displayState = useAtomValue(displayForm)
-    const userID = useAtomValue(userId)
-    const [user, setUser] = useAtom(userObj)
-    const token = useAtomValue(authToken)
+    const displayState = useAtomValue(modalAtom)
+    const userId = useAtomValue(userIdAtom)
+    const token = useAtomValue(tokenAtom)
+    const [user, setUser] = useAtom(userDataAtom)
 
     useEffect(() => {
-        const token = localStorage.getItem('token')
-        const userId = localStorage.getItem('userId')
-
         if (![token, userId].includes(null)) {
             axios
-                .get(`${_const.API_BASE_URL}/${userId}`, {
+                .get(`${API_BASE_URL}/${userId}`, {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        Authorization: `Bearer ${token}`,
                     },
                 })
                 .then((res) => {
@@ -32,14 +29,14 @@ export default function App() {
                     console.error('Error fetching user data:', err)
                 })
         }
-    }, [userID, token, setUser])
+    }, [token, userId])
 
     return (
         <div>
             <Header />
             <main className='h-screen flex justify-center pt-24'>
                 <div>
-                    {displayState ? <Form /> : <></>}
+                    {displayState ? <LoginModal /> : <></>}
                     {user ? (
                         <Movies />
                     ) : (

@@ -1,26 +1,36 @@
 import { Prisma } from '@prisma/client'
 import { atom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 
 // Display Management
-export const loginState = atom<'login' | 'signup'>('login')
-export const displayForm = atom<boolean>(false)
+export const loginStateAtom = atom<'login' | 'signup'>('login')
+export const modalAtom = atom<boolean>(false)
+export const refreshAtom = atom<boolean>(false)
+export const showProfileMenuAtom = atom<boolean>(false)
 
 // User Creation and Login
-export const inputName = atom<string>('')
-export const inputEmail = atom<string>('')
-export const inputPassword = atom<string>('')
+export const inputNameAtom = atom<string>('')
+export const inputEmailAtom = atom<string>('')
+export const inputPasswordAtom = atom<string>('')
 
 // User Data Store
-export const authToken = atom<string | null>(null)
-export const userId = atom<number | null>(null)
-export const userObj = atom<Prisma.UserUncheckedCreateInput | null>(null)
+export const tokenAtom = atomWithStorage<string | null>('token', null)
+export const userIdAtom = atomWithStorage<number | null>('userId', null)
+export const userDataAtom = atom<Prisma.UserUncheckedCreateInput | null>(null)
 
 // Movies
 export const moviesArray = atom<Prisma.MovieUncheckedCreateInput[] | null>(null)
 export const addingMovie = atom<boolean>(false)
 
 // Movie Creation
-export const inputTitle = atom<string>('')
-export const inputDescription = atom<string>('')
-export const inputCover = atom<string>('')
-export const inputRuntime = atom<string>('')
+export const inputTitleAtom = atom<string>('')
+export const inputDescriptionAtom = atom<string>('')
+export const inputCoverAtom = atom<string>('')
+export const inputRuntimeAtom = atom<string>('')
+
+// Movie Editing
+export const isEditingAtom = atom<boolean>(false)
+export const editTitleAtom = atom<string>('')
+export const editDescriptionAtom = atom<string>('')
+export const editCoverAtom = atom<string>('')
+export const editRuntimeAtom = atom<string>('')

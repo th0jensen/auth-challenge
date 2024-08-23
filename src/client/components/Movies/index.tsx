@@ -1,27 +1,35 @@
 import { useAtom, useAtomValue } from 'jotai'
-import { addingMovie, moviesArray, userObj } from '../../atoms'
+import {
+    addingMovie,
+    moviesArray,
+    refreshAtom,
+    tokenAtom,
+    userDataAtom,
+} from '../../atoms'
 import Error from '../../Error'
 import { useEffect } from 'react'
 import axios from 'axios'
-import _const from '../../const'
 import MoviesListItem from './components/MovieListItem'
 import MoviesListForm from './components/MovieListForm'
 import { SquarePen } from 'lucide-react'
+import { API_MOVIES_URL } from '../../const'
 
 export default function Movies() {
     const [addingMov, setAddingMov] = useAtom(addingMovie)
-    const user = useAtomValue(userObj)
+    const user = useAtomValue(userDataAtom)
     const [movies, setMovies] = useAtom(moviesArray)
+    const token = useAtomValue(tokenAtom)
+    const refresh = useAtomValue(refreshAtom)
 
     useEffect(() => {
         axios
-            .get(_const.API_MOVIES_URL, {
+            .get(API_MOVIES_URL, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: `Bearer ${token}`,
                 },
             })
             .then((res) => setMovies(res.data.movies))
-    }, [])
+    }, [refresh])
 
     if (!user) return <Error />
     if (!movies)
