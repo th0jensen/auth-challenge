@@ -13,4 +13,14 @@ export const inputPassword = atom<string>('')
 // User Data Store
 export const authToken = atom<string | null>(null)
 export const userId = atom<number | null>(null)
-export const userObj = atom<Prisma.UserCreateInput | null>(null)
+export const userObj = atom<Prisma.UserUncheckedCreateInput | null>(null)
+
+// Movies
+export const moviesArray = atom<Prisma.MovieUncheckedCreateInput[] | null>(null)
+export const addingMovie = atom<boolean>(false)
+
+// Movie Creation
+export const inputTitle = atom<string>('')
+export const inputDescription = atom<string>('')
+export const inputCover = atom<string>('')
+export const inputRuntime = atom<number>(0)

@@ -1,10 +1,11 @@
+import axios from 'axios'
 import { useAtom, useAtomValue } from 'jotai'
+import { useEffect } from 'react'
 import { authToken, displayForm, userId, userObj } from './atoms'
 import Form from './components/Form'
 import Header from './components/Header/index'
-import { useEffect } from 'react'
-import axios from 'axios'
 import _const from './const'
+import Movies from './components/Movies'
 
 export default function App() {
     const displayState = useAtomValue(displayForm)
@@ -13,8 +14,10 @@ export default function App() {
     const token = useAtomValue(authToken)
 
     useEffect(() => {
+        const token = localStorage.getItem('token')
         const userId = localStorage.getItem('userId')
-        if (userId !== null) {
+
+        if (![token, userId].includes(null)) {
             axios
                 .get(`${_const.API_BASE_URL}/${userId}`, {
                     headers: {
@@ -34,8 +37,16 @@ export default function App() {
     return (
         <div>
             <Header />
-            {displayState ? <Form /> : <></>}
-            <h1>{user ? user.name : 'Hello World!'}</h1>
+            <main className='h-screen flex justify-center pt-24'>
+                <div>
+                    {displayState ? <Form /> : <></>}
+                    {user ? (
+                        <Movies />
+                    ) : (
+                        <span className='loading loading-spinner'></span>
+                    )}
+                </div>
+            </main>
         </div>
     )
 }

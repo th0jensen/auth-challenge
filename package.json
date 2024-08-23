@@ -21,6 +21,7 @@
         "express": "^4.19.2",
         "jose": "^5.7.0",
         "jotai": "^2.9.3",
+        "lucide-react": "^0.429.0",
         "morgan": "^1.10.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1"

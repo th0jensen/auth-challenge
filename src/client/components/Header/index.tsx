@@ -8,9 +8,11 @@ export default function Header() {
     const user = useAtomValue(userObj)
 
     return (
-        <header className='navbar'>
+        <header className='navbar fixed bg-base-300 p-4'>
             <div className='navbar-start'>
-                <h1 className='font-bold btn btn-ghost'>Movie Manager</h1>
+                <h1 className='font-bold text-xl btn btn-ghost'>
+                    Movie Manager
+                </h1>
             </div>
             <div className='navbar-end gap-4'>
                 {user !== null ? (

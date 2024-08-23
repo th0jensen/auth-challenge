@@ -18,7 +18,6 @@ export default function Form() {
     const [errorMessage, setErrorMessage] = useState('')
     const login = useAtomValue(loginState)
     const setDisplay = useSetAtom(displayForm)
-    const setUserId = useSetAtom(userId)
     const setToken = useSetAtom(authToken)
     const [name, setName] = useAtom(inputName)
     const [email, setEmail] = useAtom(inputEmail)
@@ -36,13 +35,8 @@ export default function Form() {
     const loginToState = (res: AxiosResponse) => {
         console.log(res)
         localStorage.setItem('userId', res.data.user.id)
-        // console.log('INFO: Saved User Id: ', res.data.user.id)
         localStorage.setItem('token', res.data.token)
         setToken(localStorage.getItem('token'))
-        // console.log(
-        //     'INFO: Saved token to Local Storage:',
-        //     localStorage.getItem('token')
-        // )
         setDisplay(false)
     }
 

@@ -12,6 +12,7 @@ export default function Logout() {
         setAuthToken(null)
 
         localStorage.removeItem('token')
+        localStorage.removeItem('userId')
     }
 
     return (

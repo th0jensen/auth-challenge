@@ -11,6 +11,8 @@ app.use(express.json({ limit: '50mb' }))
 
 // Routers
 import usersRouter from './routes/users'
+import moviesRouter from './routes/movies'
 app.use('/users', usersRouter)
+app.use('/movies', moviesRouter)
 
 export default app
