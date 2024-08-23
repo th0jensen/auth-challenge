@@ -12,7 +12,7 @@ import {
 } from '../../../atoms'
 import { API_MOVIES_URL } from '../../../const'
 import axios from 'axios'
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 
 export default function EditMovieListItem(props: {
     movie: Prisma.MovieUncheckedCreateInput
