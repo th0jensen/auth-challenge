@@ -5,5 +5,6 @@ import authenticate from '../utils/authenticate'
 const router: Router = express.Router()
 
 router.get('/', authenticate, moviesController.getAllMovies)
+router.post('/', authenticate, moviesController.createMovie)
 
 export default router

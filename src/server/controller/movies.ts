@@ -13,3 +13,25 @@ export const getAllMovies = async (req: Request, res: Response) => {
         res.json({ error: e.message })
     }
 }
+
+export const createMovie = async (req: Request, res: Response) => {
+    const { title, runtimeMins, description, cover, userId } = req.body
+
+    try {
+        const result = await prisma.movie.create({
+            data: {
+                title: title,
+                runtimeMins: parseInt(runtimeMins),
+                description: description,
+                cover: cover,
+                userId: parseInt(userId),
+            },
+            include: {
+                user: true,
+            },
+        })
+        res.json({ movie: result })
+    } catch (e: any) {
+        res.json({ error: e.message })
+    }
+}

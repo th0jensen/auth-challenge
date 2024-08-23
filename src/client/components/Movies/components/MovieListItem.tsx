@@ -12,17 +12,17 @@ export default function MoviesListItem(props: {
                 <img src={movie.cover} alt={movie.title} />
                 <div className='absolute inset-0 bg-black opacity-50'></div>
             </figure>
-            <div className='flex flex-col justify-end z-50 p-8 gap-2'>
+            <div className='flex flex-col justify-end z-40 p-8 gap-2'>
                 <h1 className='card-title'>{movie.title}</h1>
                 <p className='font-bold'>Runtime: {movie.runtimeMins} mins</p>
                 <p className='italic'>{movie.description}</p>
                 {/* @ts-ignore */}
                 <p className='text-sm'>Added by {movie.user.name}</p>
                 <div className='card-actions justify-end'>
-                    <button className='btn btn-ghost hover:text-orange-400 hover:fill-white'>
+                    <button className='btn btn-ghost hover:bg-primary hover:text-white'>
                         <Pencil />
                     </button>
-                    <button className='btn btn-ghost hover:text-red-500'>
+                    <button className='btn btn-ghost hover:bg-red-400 hover:text-white'>
                         <Trash2 />
                     </button>
                 </div>

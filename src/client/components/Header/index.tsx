@@ -8,7 +8,7 @@ export default function Header() {
     const user = useAtomValue(userObj)
 
     return (
-        <header className='navbar fixed bg-base-300 p-4'>
+        <header className='navbar fixed bg-base-300 p-4 z-50'>
             <div className='navbar-start'>
                 <h1 className='font-bold text-xl btn btn-ghost'>
                     Movie Manager
