@@ -12,7 +12,7 @@ import {
 } from '../../../atoms'
 import { API_MOVIES_URL } from '../../../const'
 import axios from 'axios'
-// import { useEffect } from 'react'
+import { useEffect } from 'react'
 
 export default function EditMovieListItem(props: {
     movie: Prisma.MovieUncheckedCreateInput
@@ -27,29 +27,23 @@ export default function EditMovieListItem(props: {
     const token = useAtomValue(tokenAtom)
     const { movie } = props
 
-    // useEffect(() => {
-    //     setTitle(movie.title)
-    //     setDescription(movie.description)
-    //     setCover(movie.cover)
-    //     setRuntime(movie.runtimeMins.toString())
-    // }, [])
+    useEffect(() => {
+        setTitle(movie.title)
+        setDescription(movie.description)
+        setCover(movie.cover)
+        setRuntime(movie.runtimeMins.toString())
+    }, [])
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
-        const updatedTitle = title || movie.title
-        const updatedDescription = description || movie.description
-        const updatedCover = cover || movie.cover
-        const updatedRuntime = runtime || movie.runtimeMins.toString()
-
         axios
             .put(
                 `${API_MOVIES_URL}/${movie.id}`,
                 {
-                    title: updatedTitle,
-                    description: updatedDescription,
-                    cover: updatedCover,
-                    runtimeMins: updatedRuntime,
+                    title: title,
+                    description: description,
+                    cover: cover,
+                    runtimeMins: runtime,
                     userId: userId,
                 },
                 {
