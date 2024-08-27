@@ -1,11 +1,4 @@
 import { useAtom, useAtomValue } from 'jotai'
-import {
-    addingMovie,
-    moviesArray,
-    refreshAtom,
-    tokenAtom,
-    userDataAtom,
-} from '../../atoms'
 import Error from '../../Error'
 import { useEffect } from 'react'
 import axios from 'axios'
@@ -13,11 +6,14 @@ import MoviesListItem from './components/MovieListItem'
 import MoviesListForm from './components/MovieListForm'
 import { SquarePen } from 'lucide-react'
 import { API_MOVIES_URL } from '../../const'
+import { isAddingAtom, refreshAtom } from '../../state/ui.state'
+import { userDataAtom, tokenAtom } from '../../state/user.state'
+import { moviesAtom } from '../../state/movie.state'
 
 export default function Movies() {
-    const [addingMov, setAddingMov] = useAtom(addingMovie)
+    const [addingMov, setAddingMov] = useAtom(isAddingAtom)
     const user = useAtomValue(userDataAtom)
-    const [movies, setMovies] = useAtom(moviesArray)
+    const [movies, setMovies] = useAtom(moviesAtom)
     const token = useAtomValue(tokenAtom)
     const refresh = useAtomValue(refreshAtom)
 

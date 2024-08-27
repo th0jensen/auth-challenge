@@ -1,11 +1,12 @@
 import axios from 'axios'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect } from 'react'
-import { tokenAtom, modalAtom, userIdAtom, userDataAtom } from './atoms'
 import Header from './components/Header/index'
 import Movies from './components/Movies'
 import { API_BASE_URL } from './const'
 import LoginModal from './components/LoginModal'
+import { modalAtom } from './state/ui.state'
+import { userIdAtom, tokenAtom, userDataAtom } from './state/user.state'
 
 export default function App() {
     const displayState = useAtomValue(modalAtom)

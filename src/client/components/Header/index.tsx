@@ -1,12 +1,12 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import LogoutButton from './components/LogoutButton'
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 import {
     loginStateAtom,
     modalAtom,
     showProfileMenuAtom,
-    userDataAtom,
-} from '../../atoms'
-import LogoutButton from './components/LogoutButton'
-import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
+} from '../../state/ui.state'
+import { userDataAtom } from '../../state/user.state'
 
 export default function Header() {
     const setLogin = useSetAtom(loginStateAtom)

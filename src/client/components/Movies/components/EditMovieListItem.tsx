@@ -1,18 +1,16 @@
 import { Prisma } from '@prisma/client'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { API_MOVIES_URL } from '../../../const'
+import axios from 'axios'
+import { useEffect } from 'react'
 import {
     editTitleAtom,
     editDescriptionAtom,
     editCoverAtom,
     editRuntimeAtom,
-    userIdAtom,
-    tokenAtom,
-    isEditingAtom,
-    refreshAtom,
-} from '../../../atoms'
-import { API_MOVIES_URL } from '../../../const'
-import axios from 'axios'
-import { useEffect } from 'react'
+} from '../../../state/movie.state'
+import { refreshAtom, isEditingAtom } from '../../../state/ui.state'
+import { userIdAtom, tokenAtom } from '../../../state/user.state'
 
 export default function EditMovieListItem(props: {
     movie: Prisma.MovieUncheckedCreateInput

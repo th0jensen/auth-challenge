@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai'
-import { tokenAtom, userIdAtom, userDataAtom } from '../../../atoms'
 import { RESET } from 'jotai/utils'
+import { userIdAtom, tokenAtom, userDataAtom } from '../../../state/user.state'
 
 export default function LogoutButton() {
     const setUserId = useSetAtom(userIdAtom)

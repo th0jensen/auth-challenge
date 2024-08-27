@@ -3,7 +3,8 @@ import axios from 'axios'
 import { Trash2 } from 'lucide-react'
 import { API_MOVIES_URL } from '../../../../../const'
 import { useAtom, useAtomValue } from 'jotai'
-import { refreshAtom, tokenAtom } from '../../../../../atoms'
+import { refreshAtom } from '../../../../../state/ui.state'
+import { tokenAtom } from '../../../../../state/user.state'
 
 export default function TrashButton(props: {
     movie: Prisma.MovieUncheckedCreateInput

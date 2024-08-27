@@ -2,17 +2,16 @@ import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
-import {
-    tokenAtom,
-    modalAtom,
-    inputEmailAtom,
-    inputNameAtom,
-    inputPasswordAtom,
-    loginStateAtom,
-    userIdAtom,
-} from '../../atoms'
 import Input from './components/Input'
 import { API_LOGIN_URL, API_REGISTER_URL } from '../../const'
+import { loginStateAtom, modalAtom } from '../../state/ui.state'
+import {
+    tokenAtom,
+    userIdAtom,
+    inputNameAtom,
+    inputEmailAtom,
+    inputPasswordAtom,
+} from '../../state/user.state'
 
 export default function LoginModal() {
     const [errorMessage, setErrorMessage] = useState('')

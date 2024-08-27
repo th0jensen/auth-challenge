@@ -1,23 +1,21 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import {
-    addingMovie,
-    inputCoverAtom,
-    inputDescriptionAtom,
-    inputRuntimeAtom,
-    inputTitleAtom,
-    refreshAtom,
-    tokenAtom,
-    userIdAtom,
-} from '../../../atoms'
 import axios from 'axios'
 import { API_MOVIES_URL } from '../../../const'
+import {
+    inputTitleAtom,
+    inputDescriptionAtom,
+    inputCoverAtom,
+    inputRuntimeAtom,
+} from '../../../state/movie.state'
+import { isAddingAtom, refreshAtom } from '../../../state/ui.state'
+import { userIdAtom, tokenAtom } from '../../../state/user.state'
 
 export default function MoviesListForm() {
     const [title, setTitle] = useAtom(inputTitleAtom)
     const [description, setDescription] = useAtom(inputDescriptionAtom)
     const [cover, setCover] = useAtom(inputCoverAtom)
     const [runtime, setRuntime] = useAtom(inputRuntimeAtom)
-    const setIsAdding = useSetAtom(addingMovie)
+    const setIsAdding = useSetAtom(isAddingAtom)
     const userId = useAtomValue(userIdAtom)
     const token = useAtomValue(tokenAtom)
     const [refresh, setRefresh] = useAtom(refreshAtom)
